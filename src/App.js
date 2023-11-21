@@ -7,6 +7,7 @@ import UserProfile from './pages/UserProfile';
 import Register from './components/Register';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
+import AddHorse from './components/AddHorse';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/user/profile" element={<UserProfile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/add-horse" element={<AddHorse />} />
 
         {/* Define other routes here */}
       </Routes>
