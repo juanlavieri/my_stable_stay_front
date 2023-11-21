@@ -1,15 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
-// Import other pages here
+import Search from './pages/Search'; // Import Search page
 
 function App() {
   return (
     <Router>
-      <Switch>
-        <Route path="/" exact component={Home} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} /> {/* Add this line */}
         {/* Define other routes here */}
-      </Switch>
+      </Routes>
     </Router>
   );
 }
