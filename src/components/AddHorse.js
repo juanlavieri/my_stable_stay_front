@@ -6,28 +6,39 @@ function AddHorse() {
     name: '',
     breed: '',
     age: '',
-    medicalDocuments: []
-    // Add other fields as necessary
+    medicalDocument: null // This will be a file object
   });
 
-  // Component code will go here
   const handleChange = (e) => {
     setHorseData({ ...horseData, [e.target.name]: e.target.value });
   };
-  
+
+  const handleFileChange = (e) => {
+    setHorseData({ ...horseData, medicalDocument: e.target.files[0] });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const userToken = localStorage.getItem('token'); // Retrieve the token from local storage
+
+    const formData = new FormData();
+    formData.append('name', horseData.name);
+    formData.append('breed', horseData.breed);
+    formData.append('age', horseData.age);
+    if (horseData.medicalDocument) {
+      formData.append('medicalDocument', horseData.medicalDocument);
+    }
+
+    const userToken = localStorage.getItem('token');
     if (!userToken) {
       console.error('No token found');
-      return; // Optionally handle the lack of a token
+      return;
     }
-  
+
     try {
-      const response = await axios.post('http://localhost:3001/api/horses', horseData, {
+      const response = await axios.post('http://localhost:3001/api/horses', formData, {
         headers: {
-          'Authorization': `Bearer ${userToken}`
+          'Authorization': `Bearer ${userToken}`,
+          'Content-Type': 'multipart/form-data'
         }
       });
       console.log(response.data); // Handle the response as needed
@@ -35,8 +46,7 @@ function AddHorse() {
       console.error(error.response.data); // Error handling
     }
   };
-  
-  
+
   return (
     <form onSubmit={handleSubmit}>
       <input
@@ -61,7 +71,11 @@ function AddHorse() {
         onChange={handleChange}
         placeholder="Age"
       />
-      {/* Add inputs for other fields like medical documents */}
+      <input
+        type="file"
+        name="medicalDocument"
+        onChange={handleFileChange}
+      />
       <button type="submit">Add Horse</button>
     </form>
   );
