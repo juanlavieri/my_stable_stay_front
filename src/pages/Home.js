@@ -4,8 +4,7 @@ function Home() {
   return (
     <div>
       <h1>Welcome to StableStay</h1>
-      <p>Your trusted source for finding and booking stables.</p>
-      {/* More content will be added here */}
+      {/* Add any additional content or components for the home page */}
     </div>
   );
 }

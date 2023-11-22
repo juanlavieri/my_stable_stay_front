@@ -1,33 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 
-function StableDetails() {
-  const [stable, setStable] = useState(null);
-  const { id } = useParams(); // Get stable ID from URL
+function StableDetails({ match }) {
+  const [stableDetails, setStableDetails] = useState({});
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/stables/${id}`)
-      .then(response => {
-        setStable(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching stable details', error);
-      });
-  }, [id]);
+    const fetchStableDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/api/stables/${match.params.id}`);
+        setStableDetails(response.data);
+      } catch (error) {
+        // Handle error
+      }
+    };
+
+    fetchStableDetails();
+  }, [match.params.id]);
 
   return (
     <div>
-      <h1>Stable Details</h1>
-      {stable ? (
-        <div>
-          <h2>{stable.name}</h2>
-          <p>{stable.description}</p>
-          {/* Display more stable details here */}
-        </div>
-      ) : (
-        <p>Loading stable details...</p>
-      )}
+      <h2>{stableDetails.name}</h2>
+      {/* Display other stable details here */}
     </div>
   );
 }

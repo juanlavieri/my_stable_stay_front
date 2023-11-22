@@ -6,7 +6,7 @@ function EditHorse({ match }) {
     name: '',
     breed: '',
     age: '',
-    medicalDocument: null // This will be a file object
+    medicalDocuments: null
   });
 
   useEffect(() => {
@@ -15,7 +15,8 @@ function EditHorse({ match }) {
         const response = await axios.get(`http://localhost:3001/api/horses/${match.params.horseId}`);
         setHorseData(response.data);
       } catch (error) {
-        console.error(error);
+        // Handle error
+        console.log(error);
       }
     };
 
@@ -23,66 +24,44 @@ function EditHorse({ match }) {
   }, [match.params.horseId]);
 
   const handleChange = (e) => {
-    setHorseData({ ...horseData, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    setHorseData({ ...horseData, medicalDocument: e.target.files[0] });
+    if (e.target.name === 'medicalDocuments') {
+      setHorseData({ ...horseData, medicalDocuments: e.target.files[0] });
+    } else {
+      setHorseData({ ...horseData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append('name', horseData.name);
     formData.append('breed', horseData.breed);
     formData.append('age', horseData.age);
-    if (horseData.medicalDocument) {
-      formData.append('medicalDocument', horseData.medicalDocument);
+    if (horseData.medicalDocuments) {
+      formData.append('medicalDocuments', horseData.medicalDocuments);
     }
 
     try {
       await axios.put(`http://localhost:3001/api/horses/${match.params.horseId}`, formData, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('userToken')}`
         }
       });
-      // Handle successful update
+      // Handle success (e.g., show a message, redirect, etc.)
+      console.log('Updated Horse information!');
     } catch (error) {
-      console.error(error.response.data); // Error handling
+      // Handle error
+      console.log(error);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="name"
-        value={horseData.name}
-        onChange={handleChange}
-        placeholder="Horse Name"
-        required
-      />
-      <input
-        type="text"
-        name="breed"
-        value={horseData.breed}
-        onChange={handleChange}
-        placeholder="Breed"
-      />
-      <input
-        type="number"
-        name="age"
-        value={horseData.age}
-        onChange={handleChange}
-        placeholder="Age"
-      />
-      <input
-        type="file"
-        name="medicalDocument"
-        onChange={handleFileChange}
-      />
+      <input type="text" name="name" value={horseData.name} onChange={handleChange} placeholder="Horse Name" required />
+      <input type="text" name="breed" value={horseData.breed} onChange={handleChange} placeholder="Breed" />
+      <input type="number" name="age" value={horseData.age} onChange={handleChange} placeholder="Age" />
+      <input type="file" name="medicalDocuments" onChange={handleChange} />
       <button type="submit">Update Horse</button>
     </form>
   );
