@@ -19,6 +19,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3001/api/users/login', formData);
+      localStorage.setItem('userRole', JSON.stringify(response.data.role));
       localStorage.setItem('userToken', response.data.token);
       navigate('/user/profile'); // Redirect to profile or home page
     } catch (error) {
