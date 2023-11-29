@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function Navbar() {
     const navigate = useNavigate();
     const isLoggedIn = localStorage.getItem('userToken') !== null;
-    
+
     // Retrieve the active role from local storage, default to 'user'
     const activeRole = localStorage.getItem('userRole') || 'user';
 
@@ -24,8 +24,17 @@ function Navbar() {
         <nav>
             <ul>
                 <li><Link to="/">Home</Link></li>
-                {isLoggedIn && activeRole === 'stableOwner' && <li><Link to="/manage-stables">Manage Stables</Link></li>}
-                {isLoggedIn && activeRole === 'user' && <li><Link to="/search">Search</Link></li>}
+                {isLoggedIn && activeRole === 'stableOwner' && (
+                    <>
+                        <li><Link to="/manage-stables">Manage Stables</Link></li>
+                    </>
+                )}
+                {isLoggedIn && activeRole === 'user' && (
+                    <>
+                        <li><Link to="/search">Search</Link></li>
+                        <li><Link to="/manage-horses">Manage Horses</Link></li> {/* Link for managing horses */}
+                    </>
+                )}
                 {isLoggedIn ? (
                     <>
                         <li><Link to="/user/profile">Profile</Link></li>
