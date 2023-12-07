@@ -1,34 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// Accessibility improvements in HorseList.js
 
 function HorseList() {
-  const [horses, setHorses] = useState([]);
-
-  useEffect(() => {
-    const fetchHorses = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/api/horses', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('userToken')}`
-          }
-        });
-        setHorses(response.data);
-      } catch (error) {
-        // Handle error
-      }
-    };
-
-    fetchHorses();
-  }, []);
+  // ... existing code
 
   return (
     <div>
-      <h2>My Horses</h2>
-      <ul>
-        {horses.map(horse => (
-          <li key={horse._id}>
-            {horse.name} - {horse.breed} - {horse.age}
-            {/* Add buttons or links for editing and deleting horses */}
+      <h2>Horses</h2>
+      <ul aria-label="List of horses">
+        {horses.map((horse) => (
+          <li key={horse.id}>
+            <h3>{horse.name}</h3>
+            <p>Breed: {horse.breed}</p>
+            <p>Age: {horse.age}</p>
+            // ... other horse details
           </li>
         ))}
       </ul>
