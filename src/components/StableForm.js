@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function StableForm({ match }) {
   const [stableData, setStableData] = useState({
-    name: '',
-    location: '',
-    description: '',
+    name: "",
+    location: "",
+    description: "",
     pricePerNight: 0,
-    amenities: '',
+    amenities: "",
     paddocks: 0,
     groomAvailable: false,
-    ownerQuartersAvailable: false
+    ownerQuartersAvailable: false,
     // Add other fields as necessary
   });
   const [imageFile, setImageFile] = useState(null);
@@ -18,20 +18,21 @@ function StableForm({ match }) {
   useEffect(() => {
     if (match.params.id) {
       // Fetch data for editing
-      axios.get(`http://localhost:3001/api/stables/${match.params.id}`)
-        .then(response => setStableData(response.data))
-        .catch(error => console.error('Error fetching stable data:', error));
+      axios
+        .get(`http://localhost:3001/api/stables/${match.params.id}`)
+        .then((response) => setStableData(response.data))
+        .catch((error) => console.error("Error fetching stable data:", error));
     }
   }, [match.params.id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name === 'image') {
+    if (name === "image") {
       setImageFile(e.target.files[0]);
     } else {
       setStableData({
         ...stableData,
-        [name]: type === 'checkbox' ? checked : value
+        [name]: type === "checkbox" ? checked : value,
       });
     }
   };
@@ -44,21 +45,24 @@ function StableForm({ match }) {
       formData.append(key, stableData[key]);
     }
     if (imageFile) {
-      formData.append('image', imageFile);
+      formData.append("image", imageFile);
     }
 
     try {
       if (match.params.id) {
         // Edit stable
-        await axios.put(`http://localhost:3001/api/stables/${match.params.id}`, formData);
+        await axios.put(
+          `http://localhost:3001/api/stables/${match.params.id}`,
+          formData,
+        );
       } else {
         // Add new stable
-        await axios.post('http://localhost:3001/api/stables', formData);
+        await axios.post("http://localhost:3001/api/stables", formData);
       }
-      console.log('Stable saved successfully');
+      console.log("Stable saved successfully");
       // Redirect or update UI as needed
     } catch (error) {
-      console.error('Error saving stable:', error);
+      console.error("Error saving stable:", error);
     }
   };
 
@@ -73,11 +77,7 @@ function StableForm({ match }) {
         placeholder="Stable Name"
       />
       {/* Add other input fields here */}
-      <input
-        type="file"
-        name="image"
-        onChange={handleChange}
-      />
+      <input type="file" name="image" onChange={handleChange} />
       <button type="submit">Save</button>
     </form>
   );

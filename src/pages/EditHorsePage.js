@@ -1,5 +1,5 @@
-import React from 'react';
-import EditHorse from '../components/EditHorse';
+import React from "react";
+import EditHorse from "../components/EditHorse";
 
 const EditHorsePage = ({ match }) => {
   return (

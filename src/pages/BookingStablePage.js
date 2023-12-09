@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 
 function BookingStablePage() {
   const [bookingData, setBookingData] = useState({
-    startDate: '',
-    endDate: '',
-    stableId: '',
+    startDate: "",
+    endDate: "",
+    stableId: "",
     stallCount: 0,
-    horseAssignments: []
+    horseAssignments: [],
   });
   const { stableId } = useParams();
   const navigate = useNavigate();
@@ -18,14 +18,17 @@ function BookingStablePage() {
     // Fetch the list of user's horses
     const fetchHorses = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/horses', {
+        const response = await axios.get("http://localhost:3001/api/horses", {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('userToken')}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
         });
         setHorses(response.data);
       } catch (error) {
-        console.error("Error fetching horses:", error.response?.data || error.message);
+        console.error(
+          "Error fetching horses:",
+          error.response?.data || error.message,
+        );
       }
     };
     fetchHorses();
@@ -47,21 +50,27 @@ function BookingStablePage() {
         updatedHorseAssignments.splice(index, 1);
       }
     }
-    setBookingData({ ...bookingData, horseAssignments: updatedHorseAssignments });
+    setBookingData({
+      ...bookingData,
+      horseAssignments: updatedHorseAssignments,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Logic to submit the booking
     try {
-      await axios.post('http://localhost:3001/api/bookings', bookingData, {
+      await axios.post("http://localhost:3001/api/bookings", bookingData, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('userToken')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
       });
-      navigate('/user/bookings'); // Redirect to user's bookings page
+      navigate("/user/bookings"); // Redirect to user's bookings page
     } catch (error) {
-      console.error("Error creating booking:", error.response?.data || error.message);
+      console.error(
+        "Error creating booking:",
+        error.response?.data || error.message,
+      );
     }
   };
 
@@ -69,13 +78,37 @@ function BookingStablePage() {
     <div>
       <h2>Book Stable</h2>
       <form onSubmit={handleSubmit}>
-        <input type="date" name="startDate" value={bookingData.startDate} onChange={handleChange} required />
-        <input type="date" name="endDate" value={bookingData.endDate} onChange={handleChange} required />
-        <input type="number" name="stallCount" value={bookingData.stallCount} onChange={handleChange} placeholder="Number of stalls" min="1" required />
-        {horses.map(horse => (
+        <input
+          type="date"
+          name="startDate"
+          value={bookingData.startDate}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="date"
+          name="endDate"
+          value={bookingData.endDate}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="number"
+          name="stallCount"
+          value={bookingData.stallCount}
+          onChange={handleChange}
+          placeholder="Number of stalls"
+          min="1"
+          required
+        />
+        {horses.map((horse) => (
           <div key={horse._id}>
             <label>
-              <input type="checkbox" name="horseAssignments" onChange={(e) => handleHorseAssignmentChange(e, horse._id)} />
+              <input
+                type="checkbox"
+                name="horseAssignments"
+                onChange={(e) => handleHorseAssignmentChange(e, horse._id)}
+              />
               {horse.name}
             </label>
           </div>

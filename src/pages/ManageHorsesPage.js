@@ -1,6 +1,6 @@
-import React from 'react';
-import HorseList from '../components/HorseList';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import React from "react";
+import HorseList from "../components/HorseList";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
 const ManageHorsesPage = () => {
   return (

@@ -1,51 +1,42 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import './Navbar.css';
 
 function Navbar() {
-    const navigate = useNavigate();
-    const isLoggedIn = localStorage.getItem('userToken') !== null;
-    const activeRole = localStorage.getItem('userRole') || 'user';
+  const userToken = localStorage.getItem('userToken');
+  const userRole = localStorage.getItem('userRole');
 
-    const handleLogout = () => {
-        localStorage.removeItem('userToken');
-        localStorage.removeItem('userRole');
-        navigate('/login');
-    };
+  const logout = () => {
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userRole');
+    window.location.href = '/login';
+  };
 
-    const handleSwitchRole = () => {
-        const newRole = activeRole === 'user' ? 'stableOwner' : 'user';
-        localStorage.setItem('userRole', newRole);
-        window.location.reload();
-    };
-
-    return (
-        <nav>
-            <ul>
-                <li><Link to="/">Home</Link></li>
-                {isLoggedIn && activeRole === 'stableOwner' && <li><Link to="/manage-stables">Manage Stables</Link></li>}
-                {isLoggedIn && activeRole === 'user' && (
-                    <>
-                        <li><Link to="/search">Search</Link></li>
-                        <li><Link to="/manage-horses">Manage Horses</Link></li>
-                        <li><Link to="/bookings">Book a Stable</Link></li>
-                    </>
-                )}
-                {isLoggedIn && (
-                    <>
-                        <li><Link to="/user/profile">Profile</Link></li>
-                        <li><button onClick={handleLogout}>Logout</button></li>
-                        <li><button onClick={handleSwitchRole}>Switch to {activeRole === 'user' ? 'Stable Owner' : 'User'} Mode</button></li>
-                    </>
-                )}
-                {!isLoggedIn && (
-                    <>
-                        <li><Link to="/register">Register</Link></li>
-                        <li><Link to="/login">Login</Link></li>
-                    </>
-                )}
-            </ul>
-        </nav>
-    );
+  return (
+    <nav>
+      <Link to='/'>Home</Link>
+      {userToken && userRole === 'stableOwner' && (
+        <Link to='/manage-stables'>Manage Stables</Link>
+      )}
+      {userToken && (
+        <>
+          <Link to='/search'>Search</Link>
+          <Link to='/manage-horses'>Manage Horses</Link>
+          <Link to='/bookings'>Bookings</Link>
+          <Link to='/user/profile'>Profile</Link>
+          <button onClick={logout}>Logout</button>
+        </>
+      )}
+      {!userToken && (
+        <>
+          <Link to='/register'>Register</Link>
+          <Link to='/login'>Login</Link>
+        </>
+      )}
+    </nav>
+  );
 }
 
 export default Navbar;
+
+// Importing the Navbar CSS

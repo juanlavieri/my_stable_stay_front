@@ -1,6 +1,6 @@
 // Health Document Upload Component
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 function HealthDocumentUpload() {
   const [file, setFile] = useState(null);
@@ -12,20 +12,20 @@ function HealthDocumentUpload() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
-      alert('Please select a file to upload.');
+      alert("Please select a file to upload.");
       return;
     }
     const formData = new FormData();
-    formData.append('document', file);
+    formData.append("document", file);
     try {
-      await axios.post('/api/horses/upload', formData, {
+      await axios.post("/api/horses/upload", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
-      alert('Document uploaded successfully.');
+      alert("Document uploaded successfully.");
     } catch (error) {
-      alert('Failed to upload the document.');
+      alert("Failed to upload the document.");
     }
   };
 

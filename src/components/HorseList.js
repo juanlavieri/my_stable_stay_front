@@ -1,7 +1,21 @@
-// Accessibility improvements in HorseList.js
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function HorseList() {
-  // ... existing code
+  const [horses, setHorses] = useState([]);
+
+  useEffect(() => {
+    const fetchHorses = async () => {
+      try {
+        const response = await axios.get("/api/horses");
+        setHorses(response.data);
+      } catch (error) {
+        alert("Failed to load horses. Please refresh the page.");
+      }
+    };
+
+    fetchHorses();
+  }, []);
 
   return (
     <div>

@@ -1,26 +1,71 @@
-// Updated AddHorse.js with enhanced error handling and form validation
-
-// ... existing imports and code
+import React, { useState } from "react";
+import axios from "axios";
 
 function AddHorse() {
-  // ... existing state and functions
+  const [name, setName] = useState("");
+  const [breed, setBreed] = useState("");
+  const [age, setAge] = useState("");
+  const [medicalDocuments, setMedicalDocuments] = useState([]);
+
+  const handleFileChange = (e) => {
+    setMedicalDocuments([...medicalDocuments, e.target.files[0]]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Form validation logic here
-    if (!name || !breed || age <= 0 || !medicalDocuments.length) {
-      alert('Please fill in all fields correctly.');
+    if (!name || !breed || !age || medicalDocuments.length === 0) {
+      alert("Please fill in all fields correctly.");
       return;
     }
 
+    // Form submission logic
     try {
-      // Existing axios POST request code
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("breed", breed);
+      formData.append("age", age);
+      medicalDocuments.forEach((doc) =>
+        formData.append("medicalDocuments", doc),
+      );
+
+      const response = await axios.post("/api/horses", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("Horse added successfully.");
     } catch (error) {
-      alert('Error submitting the form. Please try again.');
+      alert("Error submitting the form. Please try again.");
     }
   };
 
-  // ... existing JSX
+  return (
+    <div>
+      <h2>Add Horse</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Breed"
+          value={breed}
+          onChange={(e) => setBreed(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Age"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+        />
+        <input type="file" onChange={handleFileChange} multiple />
+        <button type="submit">Add Horse</button>
+      </form>
+    </div>
+  );
 }
 
 export default AddHorse;

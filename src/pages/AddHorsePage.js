@@ -1,5 +1,5 @@
-import React from 'react';
-import AddHorse from '../components/AddHorse';
+import React from "react";
+import AddHorse from "../components/AddHorse";
 
 const AddHorsePage = () => {
   return (

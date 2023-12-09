@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 function StableList() {
   const [stables, setStables] = useState([]);
@@ -8,12 +8,17 @@ function StableList() {
   useEffect(() => {
     const fetchStables = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/stables', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('userToken')}` }
+        const response = await axios.get("http://localhost:3001/api/stables", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
         });
         setStables(response.data);
       } catch (error) {
-        console.error("Error fetching stables:", error.response?.data || error.message);
+        console.error(
+          "Error fetching stables:",
+          error.response?.data || error.message,
+        );
       }
     };
 
@@ -26,7 +31,7 @@ function StableList() {
     <div>
       <h2>My Stables</h2>
       <Link to="/add-stable">Add New Stable</Link>
-      {stables.map(stable => (
+      {stables.map((stable) => (
         <div key={stable._id}>
           <h3>{stable.name}</h3>
           <p>{stable.description}</p>
